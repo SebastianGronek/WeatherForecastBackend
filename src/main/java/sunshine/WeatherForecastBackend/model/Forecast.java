@@ -7,9 +7,10 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class Weather {
+public class Forecast {
+    String provider;
     LocalDateTime lastObservationTime;
-    String description;
+    String[] description;
     String cityName;
     double pressure;
 //    double seaLevelPressure;
