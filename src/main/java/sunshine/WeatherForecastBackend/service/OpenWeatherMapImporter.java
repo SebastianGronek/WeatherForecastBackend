@@ -7,6 +7,8 @@ import sunshine.WeatherForecastBackend.error.CannotImportWeatherFromExternalData
 import sunshine.WeatherForecastBackend.model.Forecast;
 import sunshine.WeatherForecastBackend.model.OpenWeatherMapDTO;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class OpenWeatherMapImporter {
@@ -14,7 +16,7 @@ public class OpenWeatherMapImporter {
 
     private final OpenWeatherMapMapper openWeatherMapMapper = new OpenWeatherMapMapper();
 
-    public Forecast importWeatherConditionsFromOpenWeatherMap(String cityName, String unit) {
+    public List<Forecast> importWeatherConditionsFromOpenWeatherMap(String cityName, String unit) {
         String uri = "http://api.openweathermap.org/data/2.5/weather?q={cityName}&appid={apiAccessKey}&units={unit}";
         String apiAccessKey = "95aeddeab78810ec4e5e46ed73f205cd";
         System.out.println("works to this moment");
