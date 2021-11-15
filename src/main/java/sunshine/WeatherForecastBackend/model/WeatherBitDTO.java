@@ -6,22 +6,29 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WeatherBitDTO {
-    String ts;
-    String cityName;
-    String pres;
-    String slp;
-    String windSpd;
-    String windDir;
-    String temp;
-    String appTemp;
-    String rh;
-    String clouds;
-    Weather weather;
-    String precip;
-    String snow;
+    String count;
+    Data[] data;
 
-    @Data
-    public static class Weather {
-        String description;
+    @lombok.Data
+    public static class Data {
+        String ts;
+        String city_name;
+        String pres;
+        String slp;
+        String wind_spd;
+        String wind_dir;
+        String temp;
+        String app_temp;
+        String rh;
+        String clouds;
+        Weather weather;
+        String precip;
+        String snow;
+
+        @lombok.Data
+        public static class Weather {
+            String description;
+        }
     }
 }
+

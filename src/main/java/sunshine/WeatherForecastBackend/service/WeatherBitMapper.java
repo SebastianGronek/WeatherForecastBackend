@@ -4,25 +4,31 @@ import lombok.RequiredArgsConstructor;
 import sunshine.WeatherForecastBackend.model.Weather;
 import sunshine.WeatherForecastBackend.model.WeatherBitDTO;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 
 @RequiredArgsConstructor
 public class WeatherBitMapper {
-    public static Weather convertToWeather(WeatherBitDTO weatherBitDTO) {
-        LocalDateTime timeOfObservation = LocalDateTime.parse(weatherBitDTO.getTs(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        String description = weatherBitDTO.getWeather().getDescription();
-        String cityName = weatherBitDTO.getCityName();
-        double pressure = Double.parseDouble(weatherBitDTO.getPres());
-        double seaLevelPressure = Double.parseDouble(weatherBitDTO.getSlp());
-        double windSpeed = Double.parseDouble(weatherBitDTO.getWindSpd());
-        int windDirection = Integer.parseInt(weatherBitDTO.getWindDir());
-        double temperature = Double.parseDouble(weatherBitDTO.getTemp());
-        double apparentTemperature = Double.parseDouble(weatherBitDTO.getAppTemp());
-        int clouds = Integer.parseInt(weatherBitDTO.getClouds());
-        int humidity = Integer.parseInt(weatherBitDTO.getRh());
-        double precipitation = Double.parseDouble(weatherBitDTO.getPrecip());
-        double snow = Double.parseDouble(weatherBitDTO.getSnow());
+    public Weather convertToWeather(WeatherBitDTO weatherBitDTO) {
+        System.out.println("Count in WeatherBit: "+weatherBitDTO.getCount());
+        WeatherBitDTO.Data[] data = weatherBitDTO.getData();
+        WeatherBitDTO.Data currentData = data[0];
+        long time = Integer.parseInt(currentData.getTs()) * 1000L;
+        LocalDateTime timeOfObservation = LocalDateTime.ofInstant(Instant.ofEpochMilli(time),
+                TimeZone.getDefault().toZoneId());
+        String description = currentData.getWeather().getDescription();
+        String cityName = currentData.getCity_name();
+        double pressure = Double.parseDouble(currentData.getPres());
+        double seaLevelPressure = Double.parseDouble(currentData.getSlp());
+        double windSpeed = Double.parseDouble(currentData.getWind_spd());
+        int windDirection = Integer.parseInt(currentData.getWind_dir());
+        double temperature = Double.parseDouble(currentData.getTemp());
+        double apparentTemperature = Double.parseDouble(currentData.getApp_temp());
+        int clouds = Integer.parseInt(currentData.getClouds());
+        double humidity = Double.parseDouble(currentData.getRh());
+        double precipitation = Double.parseDouble(currentData.getPrecip());
+        double snow = Double.parseDouble(currentData.getSnow());
         return new Weather(timeOfObservation, description, cityName, pressure, /*seaLevelPressure,*/ windSpeed, windDirection, temperature, apparentTemperature, clouds, humidity, precipitation, snow);
     }
 }
