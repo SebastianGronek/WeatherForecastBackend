@@ -22,8 +22,8 @@ public class WeatherController {
     }
 
     @GetMapping("/getWeatherBit")
-    public Weather getWeatherFromWeatherBitImporterByCityName(@RequestParam(name = "cityName") String cityName) {
-        return weatherBitImporter.importWeatherConditionsFromOWeatherBit();
+    public Weather getWeatherFromWeatherBitImporterByCityName(@RequestParam(name = "city") String city, @RequestParam(name = "units", required = false) String units) {
+        return weatherBitImporter.importWeatherConditionsFromOWeatherBit(city, units);
     }
 
     @GetMapping("/getWeatherMap")

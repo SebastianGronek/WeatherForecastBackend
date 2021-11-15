@@ -18,7 +18,7 @@ public class Weather {
     double temperature;
     double apparentTemperature;
     int clouds;
-    int humidity;
+    double humidity;
     double precipitation;
     double snow;
 }
