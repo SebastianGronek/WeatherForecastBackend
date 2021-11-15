@@ -7,11 +7,16 @@ import sunshine.WeatherForecastBackend.model.Forecast;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.TimeZone;
 
 @RequiredArgsConstructor
 public class OpenWeatherMapMapper {
-    public Forecast convertToWeather(OpenWeatherMapDTO openWeatherMapDTO) {
+    public List<Forecast> convertToWeather(OpenWeatherMapDTO openWeatherMapDTO) {
+        return List.of(convertSingleResponseToWeather(openWeatherMapDTO));
+    }
+
+    private static Forecast convertSingleResponseToWeather(OpenWeatherMapDTO openWeatherMapDTO) {
         System.out.println("timeOfObservation: " + openWeatherMapDTO.getDt());
         System.out.println(openWeatherMapDTO.getWeather()[0].getDescription());
         System.out.println((openWeatherMapDTO.getMain()));
