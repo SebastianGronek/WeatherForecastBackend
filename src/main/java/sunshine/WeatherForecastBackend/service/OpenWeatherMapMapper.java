@@ -1,8 +1,8 @@
 package sunshine.WeatherForecastBackend.service;
 
 import lombok.RequiredArgsConstructor;
-import sunshine.WeatherForecastBackend.model.OpenWeatherMapDTO;
 import sunshine.WeatherForecastBackend.model.Forecast;
+import sunshine.WeatherForecastBackend.model.OpenWeatherMapDTO;
 import sunshine.WeatherForecastBackend.model.WeatherDto;
 
 import java.time.Instant;
@@ -18,16 +18,11 @@ public class OpenWeatherMapMapper implements ForecastMapper {
     }
 
     private static Forecast convertSingleResponseToForecast(OpenWeatherMapDTO openWeatherMapDTO) {
-        System.out.println("timeOfObservation: " + openWeatherMapDTO.getDt());
-        System.out.println(openWeatherMapDTO.getWeather()[0].getDescription());
-        System.out.println((openWeatherMapDTO.getMain()));
         String provider = "OpenWeatherMap";
         LocalDateTime timeOfObservation = LocalDateTime.ofInstant(Instant.ofEpochSecond(Integer.parseInt(openWeatherMapDTO.getDt())),
                 TimeZone.getDefault().toZoneId());
-        System.out.println(timeOfObservation);
         String[] description = Arrays.stream(openWeatherMapDTO.getWeather()).map(OpenWeatherMapDTO.WeatherInMap::getDescription).toArray(String[]::new);
         String cityName = openWeatherMapDTO.getName();
-
         double pressure = Double.parseDouble(openWeatherMapDTO.getMain().getPressure());
         double windSpeed = Double.parseDouble(openWeatherMapDTO.getWind().getSpeed());
         int windDirection = Integer.parseInt(openWeatherMapDTO.getWind().getDeg());
@@ -35,22 +30,26 @@ public class OpenWeatherMapMapper implements ForecastMapper {
         double apparentTemperature = Double.parseDouble(openWeatherMapDTO.getMain().getFeels_like());
         int clouds = Integer.parseInt(openWeatherMapDTO.getClouds().getAll());
         int humidity = Integer.parseInt(openWeatherMapDTO.getMain().getHumidity());
-        System.out.println(openWeatherMapDTO.getRain());
-        System.out.println(openWeatherMapDTO.getSnow());
-        double precipitation;
+        double precipitation = rainAmount(openWeatherMapDTO);
+        double snowAmount = snowAmount(openWeatherMapDTO);
+        return new Forecast(provider, timeOfObservation, description, cityName, pressure, windSpeed, windDirection, temperature, apparentTemperature, clouds, humidity, precipitation, snowAmount);
+    }
+
+    private static double rainAmount(OpenWeatherMapDTO openWeatherMapDTO) {
         OpenWeatherMapDTO.Rain rain;
         if ((rain = openWeatherMapDTO.getRain()) != null) {
-            precipitation = Double.parseDouble(rain.getRain1h());
+            return Double.parseDouble(rain.getRain1h());
         } else {
-            precipitation = 0;
+            return 0;
         }
+    }
+
+    private static double snowAmount(OpenWeatherMapDTO openWeatherMapDTO) {
         OpenWeatherMapDTO.Snow snow;
-        double snowAmount;
         if ((snow = openWeatherMapDTO.getSnow()) != null) {
-            snowAmount = Double.parseDouble(snow.getSnow1h());
+            return Double.parseDouble(snow.getSnow1h());
         } else {
-            snowAmount = 0;
+            return 0;
         }
-        return new Forecast(provider, timeOfObservation, description, cityName, pressure, windSpeed, windDirection, temperature, apparentTemperature, clouds, humidity, precipitation, snowAmount);
     }
 }

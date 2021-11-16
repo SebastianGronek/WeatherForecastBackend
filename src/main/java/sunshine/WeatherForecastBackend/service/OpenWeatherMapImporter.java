@@ -27,7 +27,6 @@ public class OpenWeatherMapImporter implements ForecastImporter {
     private OpenWeatherMapDTO importDto(String city, String units) {
         String uri = "http://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiAccessKey}&units={units}";
         String apiAccessKey = "95aeddeab78810ec4e5e46ed73f205cd";
-        System.out.println("works to this moment");
         units = determineUnit(units);
         return restTemplate.getForObject(uri, OpenWeatherMapDTO.class, city, apiAccessKey, units);
     }
