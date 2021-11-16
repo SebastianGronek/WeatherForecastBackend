@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sunshine.WeatherForecastBackend.error.CannotImportWeatherFromExternalDatabaseException;
 import sunshine.WeatherForecastBackend.model.Forecast;
+import sunshine.WeatherForecastBackend.model.Units;
 import sunshine.WeatherForecastBackend.model.WeatherBitDTO;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -23,9 +25,7 @@ public class WeatherBitImporter implements ForecastImporter {
     private WeatherBitDTO importDto(String city, String units) {
         String uri = "https://api.weatherbit.io/v2.0/current?key={apiAccessKey}&city={city}&units={units}";
         String apiAccessKey = "6cbd14af64704f099273d45e0940e8cb";
-        if (units == null) {
-            units = "metric";
-        }
+        units = determineUnit(units);
         return restTemplate.getForObject(uri, WeatherBitDTO.class, apiAccessKey, city, units);
     }
 
@@ -34,6 +34,20 @@ public class WeatherBitImporter implements ForecastImporter {
             return weatherBitMapper.convertToForecasts(weatherBitDTO);
         } else {
             throw new CannotImportWeatherFromExternalDatabaseException("Cannot get weather data from WeatherBit");
+        }
+    }
+
+    private String determineUnit(String units) {
+        if (units == null) {
+            return "M";
+        }
+        units = units.toUpperCase(Locale.ROOT);
+        if (Units.valueOf(units) == Units.IMPERIAL) {
+            return "I";
+        } else if (Units.valueOf(units) == Units.SCIENTIFIC) {
+            return "S";
+        } else {
+            throw new IllegalArgumentException("These units are not used int external APIs");
         }
     }
 }

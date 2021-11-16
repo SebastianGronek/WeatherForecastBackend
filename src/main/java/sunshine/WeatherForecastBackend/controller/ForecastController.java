@@ -21,7 +21,7 @@ public class ForecastController {
     }
 
     @GetMapping("/getForecast")
-    public List<Forecast> getForecastFromAllProviders(@RequestParam(name = "city") String city, @RequestParam(name = "api", required = false) String chosenApi, @RequestParam(name = "units", required = false) String units) {
+    public List<Forecast> getForecastFromChosenProviders(@RequestParam(name = "city") String city, @RequestParam(name = "api", required = false) String chosenApi, @RequestParam(name = "units", required = false) String units) {
         return forecastService.getForecastsFromChosenApi(city, chosenApi, units);
     }
 }

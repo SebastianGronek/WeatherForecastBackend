@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class ForecastService {
-    WeatherBitImporter weatherBitImporter;
-    OpenWeatherMapImporter openWeatherMapImporter;
+    private final WeatherBitImporter weatherBitImporter;
+    private final OpenWeatherMapImporter openWeatherMapImporter;
 
-    Map<WeatherForecastAPIs, ForecastImporter> importersMap;
+    private Map<WeatherForecastAPIs, ForecastImporter> importersMap;
 
     @Autowired
     public ForecastService(WeatherBitImporter weatherBitImporter, OpenWeatherMapImporter openWeatherMapImporter) {
