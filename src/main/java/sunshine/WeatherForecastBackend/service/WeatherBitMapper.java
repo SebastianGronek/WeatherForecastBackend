@@ -12,9 +12,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 @RequiredArgsConstructor
-public class WeatherBitMapper implements ForecastMapper{
+public class WeatherBitMapper implements ForecastMapper {
     public List<Forecast> convertToForecasts(WeatherDto weatherBitDTO) {
-        System.out.println("Count in WeatherBit: " + ((WeatherBitDTO) weatherBitDTO).getCount());
         WeatherBitDTO.Data[] data = ((WeatherBitDTO) weatherBitDTO).getData();
         List<Forecast> result = new ArrayList<>();
         for (WeatherBitDTO.Data currentData : data) {

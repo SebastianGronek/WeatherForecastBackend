@@ -10,7 +10,7 @@ parameter is not included, metric units are used (set as a default). Another pos
 * [Technologies](#technologies)
 * [Setup](#setup)
 * [Response](#response)
-* [Example](#Example)
+* [Examples](#Examples)
 
 ### Technologies
 * Java SE 11
@@ -34,7 +34,7 @@ The API launches on localhost:8080. Then you can call endpoint *getForecastFromC
                                                       @RequestParam(name = "units", required = false) String units)
 ```
 ### Response
-*getForecastFromChosenProviders()* endpoint returns list of Forecast objects. Each Forecast object contains fields describing various weather conditions:
+*getForecastFromChosenProviders()* endpoint returns list of Forecast objects. Each Forecast object contains fields describing various **weather conditions**:
 
 String[] description - short description of most distinct feature of weather;
 
@@ -56,7 +56,7 @@ double precipitation - amount of precipitation, measured for 1h (in millimeters 
 
 double snow - amount of snow, measured for 1h (in millimeters as default);
 
-Each Forecast contains also additional information:
+**Each Forecast contains also additional information:**
 
 String provider - name of API, from which date were fetched;
 
@@ -64,7 +64,7 @@ LocalDateTime lastObservationTime - time of observation (in your local timezone,
 
 String cityName - name of the city for which the forecast was done;
 
-### Example
+### Examples
 Sending a GET request to locally launched API with parameters:
 
 city: Warsaw;
@@ -112,6 +112,10 @@ Response
 "snow":0.0}]
 ```
 Get request to both APIs with default (metric) units:
+```
+http://localhost:8080/getForecast?city=Warsaw
+```
+Response
 ```
 [{"provider":"WeatherBit",
 "lastObservationTime":"2021-11-16T20:28:43",
