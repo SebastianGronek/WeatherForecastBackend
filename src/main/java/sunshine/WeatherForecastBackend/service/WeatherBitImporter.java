@@ -31,7 +31,7 @@ public class WeatherBitImporter implements ForecastImporter {
 
     private List<Forecast> convertDtoToWeather(WeatherBitDTO weatherBitDTO) {
         if (weatherBitDTO != null) {
-            return weatherBitMapper.convertToWeather(weatherBitDTO);
+            return weatherBitMapper.convertToForecasts(weatherBitDTO);
         } else {
             throw new CannotImportWeatherFromExternalDatabaseException("Cannot get weather data from WeatherBit");
         }

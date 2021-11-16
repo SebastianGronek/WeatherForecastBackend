@@ -20,16 +20,6 @@ public class ForecastController {
         this.forecastService = forecastService;
     }
 
-   /* @GetMapping("/getWeatherBit")
-    public List<Forecast> getWeatherFromWeatherBitImporterByCityName(@RequestParam(name = "city") String city, @RequestParam(name = "units", required = false) String units) {
-        return weatherBitImporter.importWeatherConditionsFromOWeatherBit(city, units);
-    }
-
-    @GetMapping("/getWeatherMap")
-    public Forecast getWeatherFromOpenWeatherImporterByCityName(@RequestParam(name = "city") String city, @RequestParam(name = "units", required = false) String units) {
-        return openWeatherMapImporter.importWeatherConditionsFromOpenWeatherMap(city, units);
-    }*/
-
     @GetMapping("/getForecast")
     public List<Forecast> getForecastFromAllProviders(@RequestParam(name = "city") String city, @RequestParam(name = "api", required = false) String chosenApi, @RequestParam(name = "units", required = false) String units) {
         return forecastService.getForecastsFromChosenApi(city, chosenApi, units);
