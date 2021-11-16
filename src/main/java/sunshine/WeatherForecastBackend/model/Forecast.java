@@ -13,7 +13,6 @@ public class Forecast {
     String[] description;
     String cityName;
     double pressure;
-//    double seaLevelPressure;
     double windSpeed;
     int windDirection;
     double temperature;

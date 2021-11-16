@@ -3,6 +3,7 @@ package sunshine.WeatherForecastBackend.service;
 import lombok.RequiredArgsConstructor;
 import sunshine.WeatherForecastBackend.model.OpenWeatherMapDTO;
 import sunshine.WeatherForecastBackend.model.Forecast;
+import sunshine.WeatherForecastBackend.model.WeatherDto;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -11,12 +12,12 @@ import java.util.List;
 import java.util.TimeZone;
 
 @RequiredArgsConstructor
-public class OpenWeatherMapMapper {
-    public List<Forecast> convertToWeather(OpenWeatherMapDTO openWeatherMapDTO) {
-        return List.of(convertSingleResponseToWeather(openWeatherMapDTO));
+public class OpenWeatherMapMapper implements ForecastMapper {
+    public List<Forecast> convertToForecasts(WeatherDto openWeatherMapDTO) {
+        return List.of(convertSingleResponseToForecast((OpenWeatherMapDTO) openWeatherMapDTO));
     }
 
-    private static Forecast convertSingleResponseToWeather(OpenWeatherMapDTO openWeatherMapDTO) {
+    private static Forecast convertSingleResponseToForecast(OpenWeatherMapDTO openWeatherMapDTO) {
         System.out.println("timeOfObservation: " + openWeatherMapDTO.getDt());
         System.out.println(openWeatherMapDTO.getWeather()[0].getDescription());
         System.out.println((openWeatherMapDTO.getMain()));
@@ -28,7 +29,6 @@ public class OpenWeatherMapMapper {
         String cityName = openWeatherMapDTO.getName();
 
         double pressure = Double.parseDouble(openWeatherMapDTO.getMain().getPressure());
-//        double seaLevelPressure = Double.parseDouble(openWeatherMapDTO.getMain().getSea_level());
         double windSpeed = Double.parseDouble(openWeatherMapDTO.getWind().getSpeed());
         int windDirection = Integer.parseInt(openWeatherMapDTO.getWind().getDeg());
         double temperature = Double.parseDouble(openWeatherMapDTO.getMain().getTemp());
@@ -51,6 +51,6 @@ public class OpenWeatherMapMapper {
         } else {
             snowAmount = 0;
         }
-        return new Forecast(provider, timeOfObservation, description, cityName, pressure, /*seaLevelPressure,*/ windSpeed, windDirection, temperature, apparentTemperature, clouds, humidity, precipitation, snowAmount);
+        return new Forecast(provider, timeOfObservation, description, cityName, pressure, windSpeed, windDirection, temperature, apparentTemperature, clouds, humidity, precipitation, snowAmount);
     }
 }

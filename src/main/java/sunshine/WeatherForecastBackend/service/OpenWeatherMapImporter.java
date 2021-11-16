@@ -6,7 +6,6 @@ import org.springframework.web.client.RestTemplate;
 import sunshine.WeatherForecastBackend.error.CannotImportWeatherFromExternalDatabaseException;
 import sunshine.WeatherForecastBackend.model.Forecast;
 import sunshine.WeatherForecastBackend.model.OpenWeatherMapDTO;
-import sunshine.WeatherForecastBackend.model.WeatherBitDTO;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class OpenWeatherMapImporter implements ForecastImporter {
 
     private List<Forecast> convertDtoToWeather(OpenWeatherMapDTO openWeatherMapDTO) {
         if (openWeatherMapDTO != null) {
-            return openWeatherMapMapper.convertToWeather(openWeatherMapDTO);
+            return openWeatherMapMapper.convertToForecasts(openWeatherMapDTO);
         } else {
             throw new CannotImportWeatherFromExternalDatabaseException("Cannot get weather data from OpenWeatherMap");
         }
