@@ -26,6 +26,9 @@ public class ForecastService {
     }
 
     public List<Forecast> getForecastsFromChosenApi(String city, String weatherApi, String units) {
+        if (city == null) {
+            throw new CannotImportWeatherFromExternalDatabaseException("No city was provided to get forecast");
+        }
         if (weatherApi == null) {
             return getForecastsFromAllApis(city, units);
         }

@@ -2,6 +2,7 @@ package sunshine.WeatherForecastBackend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import sunshine.WeatherForecastBackend.error.CannotImportWeatherFromExternalDatabaseException;
 import sunshine.WeatherForecastBackend.model.Forecast;
@@ -28,7 +29,11 @@ public class OpenWeatherMapImporter implements ForecastImporter {
         String uri = "http://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiAccessKey}&units={units}";
         String apiAccessKey = "95aeddeab78810ec4e5e46ed73f205cd";
         units = determineUnit(units);
-        return restTemplate.getForObject(uri, OpenWeatherMapDTO.class, city, apiAccessKey, units);
+        try {
+            return restTemplate.getForObject(uri, OpenWeatherMapDTO.class, city, apiAccessKey, units);
+        } catch (HttpClientErrorException e) {
+            throw new CannotImportWeatherFromExternalDatabaseException("No city with this name was found in OpenWeatherMap API");
+        }
     }
 
     private List<Forecast> convertDtoToWeather(OpenWeatherMapDTO openWeatherMapDTO) {
