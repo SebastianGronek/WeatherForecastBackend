@@ -2,9 +2,11 @@ package sunshine.WeatherForecastBackend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import sunshine.WeatherForecastBackend.error.CannotImportWeatherFromExternalDatabaseException;
 import sunshine.WeatherForecastBackend.model.Forecast;
+import sunshine.WeatherForecastBackend.model.OpenWeatherMapDTO;
 import sunshine.WeatherForecastBackend.model.Units;
 import sunshine.WeatherForecastBackend.model.WeatherBitDTO;
 
@@ -26,7 +28,12 @@ public class WeatherBitImporter implements ForecastImporter {
         String uri = "https://api.weatherbit.io/v2.0/current?key={apiAccessKey}&city={city}&units={units}";
         String apiAccessKey = "6cbd14af64704f099273d45e0940e8cb";
         units = determineUnit(units);
-        return restTemplate.getForObject(uri, WeatherBitDTO.class, apiAccessKey, city, units);
+        try {
+            return restTemplate.getForObject(uri, WeatherBitDTO.class, apiAccessKey, city, units);
+        } catch (HttpClientErrorException e) {
+            throw new CannotImportWeatherFromExternalDatabaseException("No city with this name was found in WeatherBit API");
+        }
+
     }
 
     private List<Forecast> convertDtoToWeather(WeatherBitDTO weatherBitDTO) {

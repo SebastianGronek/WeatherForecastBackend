@@ -95,7 +95,7 @@ Get request to WeatherBit API with SCIENTIFIC units:
 ```
 http://localhost:8080/getForecast?city=Warsaw&api=WEATHER_BIT&units=scientific
 ```
-Response
+Response:
 ```
 [{"provider":"WeatherBit",
 "lastObservationTime":"2021-11-16T20:28:53",
@@ -115,7 +115,7 @@ Get request to both APIs with default (metric) units:
 ```
 http://localhost:8080/getForecast?city=Warsaw
 ```
-Response
+Response:
 ```
 [{"provider":"WeatherBit",
 "lastObservationTime":"2021-11-16T20:28:43",
