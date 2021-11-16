@@ -30,8 +30,8 @@ public class ForecastService {
 
     private List<Forecast> getForecastsFromBothApis(String city, String units) {
         List<Forecast> result = new ArrayList<>();
-        result.addAll(openWeatherMapImporter.importWeatherConditionsFromOpenWeatherMap(city, units));
-        result.addAll(weatherBitImporter.importWeatherConditionsFromOWeatherBit(city, units));
+        result.addAll(openWeatherMapImporter.importForecasts(city, units));
+        result.addAll(weatherBitImporter.importForecasts(city, units));
         return result;
     }
 
@@ -46,9 +46,9 @@ public class ForecastService {
     private List<Forecast> getForecastsFromParticularApi(WeatherForecastAPIs w, String city, String units) {
         switch (w) {
             case OPEN_WEATHER_MAP:
-                return openWeatherMapImporter.importWeatherConditionsFromOpenWeatherMap(city, units);
+                return openWeatherMapImporter.importForecasts(city, units);
             case WEATHER_BIT:
-                return weatherBitImporter.importWeatherConditionsFromOWeatherBit(city, units);
+                return weatherBitImporter.importForecasts(city, units);
             default:
                 return null;
         }

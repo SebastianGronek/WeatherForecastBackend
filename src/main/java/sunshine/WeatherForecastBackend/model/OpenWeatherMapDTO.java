@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OpenWeatherMapDTO {
+public class OpenWeatherMapDTO implements WeatherDto {
     WeatherInMap[] weather;
     Main main;
     Wind wind;
