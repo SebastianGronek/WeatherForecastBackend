@@ -1,6 +1,7 @@
 package sunshine.WeatherForecastBackend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -16,18 +17,19 @@ import java.util.Locale;
 @Service
 @RequiredArgsConstructor
 public class WeatherBitImporter implements ForecastImporter {
-    private final RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    private RestTemplate restTemplate;
+
     private final WeatherBitMapper weatherBitMapper = new WeatherBitMapper();
 
     public List<Forecast> importForecasts(String city, String units) {
-        WeatherBitDTO weatherBitDTO = importDto(city, units);
+        WeatherBitDTO weatherBitDTO = importDto(city, determineUnit(units));
         return convertDtoToWeather(weatherBitDTO);
     }
 
     private WeatherBitDTO importDto(String city, String units) {
         String uri = "https://api.weatherbit.io/v2.0/current?key={apiAccessKey}&city={city}&units={units}";
         String apiAccessKey = "6cbd14af64704f099273d45e0940e8cb";
-        units = determineUnit(units);
         try {
             return restTemplate.getForObject(uri, WeatherBitDTO.class, apiAccessKey, city, units);
         } catch (HttpClientErrorException e) {
@@ -37,11 +39,7 @@ public class WeatherBitImporter implements ForecastImporter {
     }
 
     private List<Forecast> convertDtoToWeather(WeatherBitDTO weatherBitDTO) {
-        if (weatherBitDTO != null) {
-            return weatherBitMapper.convertToForecasts(weatherBitDTO);
-        } else {
-            throw new CannotImportWeatherFromExternalDatabaseException("Cannot get weather data from WeatherBit");
-        }
+        return weatherBitMapper.convertToForecasts(weatherBitDTO);
     }
 
     private String determineUnit(String units) {
