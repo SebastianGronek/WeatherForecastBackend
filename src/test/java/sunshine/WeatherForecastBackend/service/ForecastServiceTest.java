@@ -9,9 +9,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import sunshine.WeatherForecastBackend.error.CannotImportWeatherFromExternalDatabaseException;
 import sunshine.WeatherForecastBackend.model.Forecast;
+import sunshine.WeatherForecastBackend.model.WeatherForecastAPIs;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -34,9 +36,11 @@ class ForecastServiceTest {
         //given
         WeatherBitImporter weatherBitImporter = new WeatherBitImporter();
         OpenWeatherMapImporter openWeatherMapImporter = new OpenWeatherMapImporter();
+
         ForecastService forecastService = new ForecastService(weatherBitImporter, openWeatherMapImporter);
         //when
-        List<Forecast> result = forecastService.getForecastsFromChosenApi(city, api, units);
+        WeatherForecastAPIs chosenApi = WeatherForecastAPIs.valueOf(api.toUpperCase(Locale.ROOT));
+        List<Forecast> result = forecastService.getForecastsFromChosenApi(city, chosenApi, units);
         //then
         assertThat(result).isNotNull();
     }
@@ -58,22 +62,23 @@ class ForecastServiceTest {
     void shouldChooseRightAPI() {
         //given
         String city = "London";
-        String api = "WEATHER_BIT";
+        WeatherForecastAPIs api = WeatherForecastAPIs.valueOf("WEATHER_BIT");
         String units = "IMPERIAL";
-        List<Forecast> responseFromMockedImporter = List.of(new Forecast("WeatherBit",
-                LocalDateTime.now(),
-                new String[]{"rain"},
-                "London",
-                1024,
-                2.3,
-                120,
-                43,
-                34,
-                50,
-                63,
-                5,
-                0
-        ));
+        List<Forecast> responseFromMockedImporter = List.of(Forecast.builder()
+                .provider("WeatherBit")
+                .lastObservationTime(LocalDateTime.now())
+                .description(new String[]{"rain"})
+                .cityName("London")
+                .pressure(1024)
+                .windSpeed(2.3)
+                .windDirection(120)
+                .temperature(43)
+                .apparentTemperature(34)
+                .clouds(50)
+                .humidity(63)
+                .precipitation(5)
+                .snow(0)
+                .build());
         when(weatherBitImporter.importForecasts(city, units)).thenReturn(responseFromMockedImporter);
         when(openWeatherMapImporter.importForecasts(city, units)).thenReturn(null);
         //when
@@ -90,6 +95,7 @@ class ForecastServiceTest {
         //when
 
         //then
-        assertThatThrownBy(() -> forecastService.getForecastsFromChosenApi(null, null, null)).isInstanceOf(CannotImportWeatherFromExternalDatabaseException.class).hasMessage("No city was provided to get forecast");
+//        assertThatThrownBy(() -> forecastService.getForecastsFromChosenApi(null, null, null)).isInstanceOf(CannotImportWeatherFromExternalDatabaseException.class).hasMessage("No city was provided to get forecast");
+        assertThatThrownBy(() -> forecastService.getForecastsFromChosenApi(null, null, null)).isInstanceOf(NullPointerException.class);
     }
 }
