@@ -30,8 +30,8 @@ public class OpenWeatherMapMapper {
                 .apparentTemperature(Double.parseDouble(openWeatherMapDTO.getMain().getFeels_like()))
                 .clouds(Integer.parseInt(openWeatherMapDTO.getClouds().getAll()))
                 .humidity(Integer.parseInt(openWeatherMapDTO.getMain().getHumidity()))
-                .precipitation(Optional.of(Double.parseDouble(openWeatherMapDTO.getRain().getRain1h())).orElse(0.0))
-                .snow(Optional.of(Double.parseDouble(openWeatherMapDTO.getSnow().getSnow1h())).orElse(0.0))
+                .precipitation(Optional.ofNullable(openWeatherMapDTO.getRain()).map(value -> Double.parseDouble(value.getRain1h())).orElse(0.0))
+                .snow(Optional.ofNullable(openWeatherMapDTO.getSnow()).map(value -> Double.parseDouble(value.getSnow1h())).orElse(0.0))
                 .build();
     }
 
