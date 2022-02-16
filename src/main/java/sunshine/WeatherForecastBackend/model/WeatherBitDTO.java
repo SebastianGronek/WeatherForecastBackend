@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WeatherBitDTO implements WeatherDto{
+public class WeatherBitDTO {
     String count;
     Data[] data;
 
