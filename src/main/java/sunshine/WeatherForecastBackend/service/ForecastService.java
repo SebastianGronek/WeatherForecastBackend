@@ -3,6 +3,7 @@ package sunshine.WeatherForecastBackend.service;
 import org.springframework.stereotype.Service;
 import sunshine.WeatherForecastBackend.error.CannotImportWeatherFromExternalDatabaseException;
 import sunshine.WeatherForecastBackend.model.Forecast;
+import sunshine.WeatherForecastBackend.model.Units;
 import sunshine.WeatherForecastBackend.model.WeatherForecastAPIs;
 
 import java.util.List;

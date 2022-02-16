@@ -13,13 +13,20 @@ import sunshine.WeatherForecastBackend.model.Units;
 import java.util.List;
 import java.util.Locale;
 
+import static sunshine.WeatherForecastBackend.model.Units.validateUnit;
+
 @Service
 @RequiredArgsConstructor
 public class OpenWeatherMapImporter implements ForecastImporter {
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-    private final OpenWeatherMapMapper openWeatherMapMapper = new OpenWeatherMapMapper();
+    private final OpenWeatherMapMapper openWeatherMapMapper;
+
+    @Autowired
+    public OpenWeatherMapImporter(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+        this.openWeatherMapMapper = new OpenWeatherMapMapper();
+    }
 
     public List<Forecast> importForecasts(String city, String units) {
         OpenWeatherMapDTO openWeatherMapDTO = importDto(city, determineUnit(units));
@@ -42,16 +49,16 @@ public class OpenWeatherMapImporter implements ForecastImporter {
     }
 
     private String determineUnit(String units) {
-        if (units == null) {
-            return "metric";
-        }
-        units = units.toUpperCase(Locale.ROOT);
-        if (Units.valueOf(units) == Units.IMPERIAL) {
-            return "imperial";
-        } else if (Units.valueOf(units) == Units.SCIENTIFIC) {
-            return "standard";
-        } else {
-            throw new IllegalArgumentException("These units are not used in external APIs");
+        switch (validateUnit(units)) {
+            case IMPERIAL:
+                return "imperial";
+            case SCIENTIFIC:
+                return "standard";
+            case METRIC:
+                return "metric";
+            default:
+                throw new IllegalArgumentException("These units are not used in external APIs");
         }
     }
+
 }
